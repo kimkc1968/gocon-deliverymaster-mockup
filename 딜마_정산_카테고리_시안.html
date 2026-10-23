@@ -813,7 +813,7 @@
     <div class="grid g4 mb" data-spec="2" id="pnKpi"></div>
     <div class="paper" data-spec="3">
       <div class="tbl-wrap"><table class="tbl" id="pnTbl">
-        <thead><tr><th>발생일</th><th>딜마</th><th>배달 아이디</th><th>브랜드/상점</th><th>법정동</th><th>접수 → 취소</th><th class="r">상점 손해액 (본사 보전)</th><th class="r">패널티 공급가액 (50%)</th><th class="r">부가세</th><th class="r">차감액</th><th class="c">차감 상태</th></tr></thead>
+        <thead><tr><th>발생일</th><th>딜마</th><th>배달 아이디</th><th>브랜드</th><th>상점</th><th>법정동</th><th>접수 → 취소</th><th class="r">상점 손해액 (본사 보전)</th><th class="r">패널티 공급가액 (50%)</th><th class="r">부가세</th><th class="r">차감액</th><th class="c">차감 상태</th></tr></thead>
         <tbody></tbody><tfoot></tfoot></table></div>
     </div>
     <div class="pager" id="pnPager"></div>
@@ -1511,10 +1511,10 @@ function renderPen() {
   const per = 15, page = Math.min(pnPage, Math.max(1, Math.ceil(rows.length / per)));
   $('#pnTbl tbody').innerHTML = rows.slice((page - 1) * per, page * per).map(p => { const d = DM[p.dm];
     return `<tr class="click${p.state === '차감실패' ? ' warn' : ''}" data-pn="${p.id}"><td class="num"><div class="two"><span>${p.day}</span><small>${WEEKS[p.w].short}</small></div></td><td>${dmCell(d)}</td><td class="num">${p.id}</td>
-      <td><div class="pn-store">${agLogo(p.brand)}<div class="two"><span>${p.store}</span><small>${p.brand}</small></div></div></td><td>${p.dong}</td><td class="num">${p.acc} → ${p.cancel} <small class="muted">(${dDiffMin(p.acc, p.cancel)}분)</small></td>
+      <td><span class="ag-tag">${agLogo(p.brand)}${p.brand}</span></td><td>${p.store}</td><td>${p.dong}</td><td class="num">${p.acc} → ${p.cancel} <small class="muted">(${dDiffMin(p.acc, p.cancel)}분)</small></td>
       <td class="r num">${won(p.damage)}</td><td class="r num">${won(p.pS)}</td><td class="r num">${won(p.pV)}</td><td class="r num minus"><b style="font-weight:500">${neg(p.amt)}</b></td>
-      <td class="c"><span class="st ${p.state === '차감완료' ? 'ok' : 'badf'}">${p.state}</span></td></tr>`; }).join('') || `<tr><td colspan="11" class="empty">조회 결과가 없습니다.</td></tr>`;
-  $('#pnTbl tfoot').innerHTML = `<tr><td colspan="6">총 ${rows.length}건</td><td class="r num">${won(sum(rows, p => p.damage))}</td><td class="r num">${won(sum(rows, p => p.pS))}</td><td class="r num">${won(sum(rows, p => p.pV))}</td><td class="r num">${neg(sum(rows, p => p.amt))}</td><td></td></tr>`;
+      <td class="c"><span class="st ${p.state === '차감완료' ? 'ok' : 'badf'}">${p.state}</span></td></tr>`; }).join('') || `<tr><td colspan="12" class="empty">조회 결과가 없습니다.</td></tr>`;
+  $('#pnTbl tfoot').innerHTML = `<tr><td colspan="7">총 ${rows.length}건</td><td class="r num">${won(sum(rows, p => p.damage))}</td><td class="r num">${won(sum(rows, p => p.pS))}</td><td class="r num">${won(sum(rows, p => p.pV))}</td><td class="r num">${neg(sum(rows, p => p.amt))}</td><td></td></tr>`;
   pager($('#pnPager'), rows.length, page, per, n => { pnPage = n; renderPen(); });
 }
 const dDiffMin = (a, b) => (+b.slice(0, 2) * 60 + +b.slice(3)) - (+a.slice(0, 2) * 60 + +a.slice(3));
@@ -2539,7 +2539,7 @@ const SPEC = {
         <tr><td>상점 손해 보전</td><td>본사가 상점에 먼저 지급한 손해액 합. 보조 = 패널티로 회수한 공급가액, <b>본사 순부담(손해액 − 패널티 공급가액)</b></td></tr>
         <tr><td>패널티 부과</td><td>공급가액(손해액 × 50%) + 부가세 10%</td></tr>
         <tr><td>차감 완료/실패</td><td>건수, 차감 완료 금액, 회수율(차감 완료 ÷ 부과)</td></tr></table>`],
-      ['3', '표와 상세', `<ul><li>컬럼 : 발생일(주차), 딜마, 배달 아이디, 브랜드, 상점(앞에 화주사 로고, 로고가 없으면 기본 상점 아이콘. 패널티 상세와 세금계산서 상세의 패널티 표도 같음), 법정동, 접수 → 취소(분), 상점 손해액, 패널티 공급가액, 부가세, 차감액, 차감 상태. 최신순, 15건 페이지</li>
+      ['3', '표와 상세', `<ul><li>컬럼 : 발생일(주차), 딜마, 배달 아이디, 브랜드(앞에 화주사 로고, 로고가 없으면 기본 상점 아이콘. 패널티 상세와 세금계산서 상세의 패널티 표도 같음), 상점(지점명), 법정동, 접수 → 취소(분), 상점 손해액, 패널티 공급가액, 부가세, 차감액, 차감 상태. 최신순, 15건 페이지</li>
         <li>행 클릭 → 상세 : 주문 정보, <b>차감 일시</b>(차감완료면 일시, 차감실패면 실패 사유와 재시도 예정), 산정식, 세금계산서 상계 안내. 배차 시도 이력은 두지 않음</li>
         <li>세금계산서 : 그 주차 관리비 공급가액에서 패널티 공급가액을 <b>상계</b> (차감 성공, 실패 무관). 본사가 패널티로 역발행하지 않음</li>
         <li>차감실패 건은 「지금 재차감」(재무 수동 재시도, 권한은 확인 필요). 차감실패가 남아 있는 딜마는 출금 요청 자체가 막히고, 보유금이 충전되면 자동 재시도 (화면 상단 경고는 두지 않고 행의 빨간 배경과 상태로만 표시)</li></ul>`],
