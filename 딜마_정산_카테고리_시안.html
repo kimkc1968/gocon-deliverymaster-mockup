@@ -33,6 +33,11 @@
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; }
+  /* 화면 전체를 90% 크기로. 팝업 최대 높이(vh)는 배율만큼 되돌려 화면 높이에 맞춤 */
+  @supports (zoom: 1) {
+    html { zoom: .9; }
+    .dlg { max-height: calc(100vh / .9 - 48px) !important; }
+  }
   body { font-family: Roboto, 'Noto Sans KR', sans-serif; font-size: 14px; color: var(--t1); background: #fff; -webkit-font-smoothing: antialiased; }
   button, input, select { font-family: inherit; font-size: inherit; color: inherit; }
   .mdi::before { line-height: 1; }
