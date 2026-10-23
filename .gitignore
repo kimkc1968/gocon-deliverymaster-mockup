@@ -1,0 +1,9 @@
+# 공개 레포라서 허용한 파일만 올림 (계약서 PDF, 법무 검토본 docx 등은 제외)
+*
+!.gitignore
+!.nojekyll
+!README.md
+!index.html
+!딜마_정산_카테고리_시안.html
+!store_logo/
+!store_logo/*
